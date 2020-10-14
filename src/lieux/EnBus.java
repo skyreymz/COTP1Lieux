@@ -10,11 +10,23 @@ public class EnBus extends MoyenTransport {
     }
 
     public Heure attente(Lieu l1, Lieu l2, Heure dep) throws ErreurTrajet {
-        throw new UnsupportedOperationException();
+    	try {
+    		Arret a1 = (Arret) l1;
+    		Arret a2 = (Arret) l2;
+    		return saLigne.attente(a1, dep);
+    	} catch (ClassCastException e) {
+    		throw new ErreurTrajet();
+    	}
     }
 
     public Heure duree(Lieu l1, Lieu l2, Heure dep) throws ErreurTrajet {
-        throw new UnsupportedOperationException();
+    	try {
+    		Arret a1 = (Arret) l1;
+    		Arret a2 = (Arret) l2;
+    		return saLigne.dureeEnBus(a1, a2);
+    	} catch (ClassCastException e) {
+    		throw new ErreurTrajet();
+    	}
     }
 
     public boolean estPossible(Lieu l1, Lieu l2, Heure dep) {

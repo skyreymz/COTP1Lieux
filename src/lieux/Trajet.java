@@ -32,8 +32,8 @@ public class Trajet {
     }
 
     public boolean estCoherent() {
-        // on vÃ©rifie que le moyen de transport utilisÃ© pour chaque Ã©tape est bien possible
-        for (Etape e : this.sesEtapes) {
+        // on vérifie que le moyen de transport utilisé pour chaque étape est bien possible
+        for (Etape e : sesEtapes) {
             if (!e.estPossible()) {
                 return false;
             }
@@ -46,11 +46,27 @@ public class Trajet {
     }
 
     public Heure duree() throws ErreurTrajet {
-        throw new UnsupportedOperationException();
+    	Heure dureeTotale = new Heure();
+    	try {
+    		for (Etape etapes : sesEtapes) {
+				dureeTotale = dureeTotale.add(etapes.duree());
+			}
+        } catch (ErreurHeure e) {
+			throw new ErreurTrajet(e.getMessage());
+		}
+    	return dureeTotale;
     }
 
     public Heure attente() throws ErreurTrajet {
-        throw new UnsupportedOperationException();
+    	Heure attenteTotale = new Heure();
+    	try {
+    		for (Etape etapes : sesEtapes) {
+    			attenteTotale = attenteTotale.add(etapes.attente());
+			}
+        } catch (ErreurHeure e) {
+			throw new ErreurTrajet(e.getMessage());
+		}
+    	return attenteTotale;
     }
 
     public int nbChgt() throws ErreurTrajet {

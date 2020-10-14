@@ -31,14 +31,14 @@ public class Etape {
     }
 
     public boolean estPossible() {
-        return this.moyen.estPossible(this.dep, this.arr, this.hdep);
+    	return moyen.estPossible(dep, arr, hdep);
     }
 
     public Heure duree() throws ErreurTrajet {
-        throw new UnsupportedOperationException();
+        return moyen.duree(dep, arr, hdep);
     }
 
     public Heure attente()  throws ErreurTrajet {
-        throw new UnsupportedOperationException();
+    	return moyen.attente(dep, arr, hdep);
     }
 }

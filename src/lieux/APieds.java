@@ -12,14 +12,12 @@ public class APieds extends MoyenTransport {
     }
 
     public Heure attente(Lieu l1, Lieu l2, Heure dep){
-    	return new Heure();
+    	return new Heure(); // Pas d'attente lorsqu'on est à pieds
     }
 
     // duree du voyage de l1 a l2, hors temps d'attente, a l'heure dep selon
     // ce moyen de transport
     public Heure duree(Lieu l1, Lieu l2, Heure dep) throws ErreurTrajet {
-        throw new UnsupportedOperationException();
+    	return l1.distance(l2);
     }
-
-
 }

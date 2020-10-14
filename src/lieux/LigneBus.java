@@ -40,35 +40,67 @@ public class LigneBus {
     }
 
     public boolean estPossible(Arret a1, Arret a2, Heure dep){
-    	try {
-    		int indexDep = sesArrets.indexOf(a1);
-	    	int indexArr = sesArrets.indexOf(a2);
-	    	if ((indexDep != -1) && (indexArr != -1)&& (indexDep < indexArr)) {
-	    		Heure temps = new Heure();
-	    		temps = temps.add(sesDeparts[sesDeparts.length-1]); // heure du dernier départ (au premier arrêt de la ligne) ; je suppose que sesDeparts est trié dans l'ordre croisant
+    	int indexDep = sesArrets.indexOf(a1);
+	    int indexArr = sesArrets.indexOf(a2);
+	    if ((indexDep != -1) && (indexArr != -1) && (indexDep < indexArr)) {
+	    	Heure heureDernierPassage = new Heure();
+	    	try {
+	    		heureDernierPassage = heureDernierPassage.add(sesDeparts[sesDeparts.length-1]); // heure du dernier départ (au premier arrêt de la ligne) ; je suppose que sesDeparts est trié dans l'ordre croisant
 		    	for (int i = 0 ; i < indexArr ; i++) {
-		    		temps = temps.add(sesTemps[i]); // on ajoute les temps entre le départ et notre arrêt
+		    		heureDernierPassage = heureDernierPassage.add(sesTemps[i]); // on ajoute les temps entre le départ et notre arrêt
 		    	}
-		    	if (temps.compareTo(dep) == -1) { // comparaison du dernier horaire de passage à notre arrêt par rapport à dep
-		    		return false;
-		    	} else {
-		    		return true;
-		    	}
-	    	} else {
-	    		return false;
-	    	}
-    	} catch (ErreurHeure e) {
-    		return false;
-    	}
+	    	} catch (ErreurHeure e) {
+	       		return false;
+	       	}
+		   	if (heureDernierPassage.compareTo(dep) == -1) { // comparaison du dernier horaire de passage à notre arrêt par rapport à dep
+		   		return false;
+		   	} else {
+		   		return true;
+		   	}
+	    } else {
+	    	return false;
+	    }
     }
 
     // On suppose que la duree de transport entre deux arrets ne depend pas
     // de l'heure et qu'on n'arrive jamais le lendemain du jour de depart.
     public Heure dureeEnBus(Arret a1, Arret a2) throws ErreurTrajet {
-        throw new UnsupportedOperationException();
+    	int indexDep = sesArrets.indexOf(a1);
+	    int indexArr = sesArrets.indexOf(a2);
+	    if ((indexDep != -1) && (indexArr != -1) && (indexDep < indexArr)) {
+	    	Heure duree = new Heure();
+	    	for (int i = indexDep ; i < indexArr ; i++) {
+	    		try {
+					duree = duree.add(sesTemps[i]);
+				} catch (ErreurHeure e) {
+					throw new ErreurTrajet(e.getMessage());
+				}
+	    	}
+	    	return duree;
+	    } else {
+	    	throw new ErreurTrajet();
+	    }
     }
 
     public Heure attente(Arret a, Heure h) throws ErreurTrajet {
-        throw new UnsupportedOperationException();
+    	int indexDep = sesArrets.indexOf(a);
+    	if (indexDep == -1) {
+    		throw new ErreurTrajet();
+    	}
+    	Heure heurePassage = new Heure();
+    	try {
+	    	for (int i = 0 ; i < indexDep ; i++) {
+	    		heurePassage = heurePassage.add(sesTemps[i]); // on ajoute les temps entre le départ et notre arrêt
+	    	}
+	    	for (Heure heureDepart : sesDeparts) {
+	    		heurePassage = heurePassage.add(heureDepart); // heure de chaque départ (au premier arrêt de la ligne)
+			    if (heurePassage.compareTo(h) >= 0) {
+			    	return h.delaiAvant(heurePassage);
+			    }
+			}
+	    	throw new ErreurTrajet("Plus de passage de bus aujourd'hui");
+    	} catch (ErreurHeure e) {
+			throw new ErreurTrajet(e.getMessage());
+    	}
     }
 }
