@@ -10,8 +10,7 @@ public class Trajet {
     private Heure dateDepart;
     private ArrayList<Etape> sesEtapes;
 
-    public Trajet(String n, Lieu dep, Lieu arr, Heure d,
-                  ArrayList<Etape> etapes) {
+    public Trajet(String n, Lieu dep, Lieu arr, Heure d, ArrayList<Etape> etapes) {
         nom = n;
         depart = dep;
         arrivee = arr;
@@ -42,7 +41,11 @@ public class Trajet {
     }
 
     public Heure hArrivee() throws ErreurTrajet {
-    	return sesEtapes.get(sesEtapes.size()-1).hArrivee();
+    	if (sesEtapes.size() > 0) {
+    		return sesEtapes.get(sesEtapes.size()-1).hArrivee();
+    	} else {
+    		return dateDepart;
+    	}
     }
 
     public Heure duree() throws ErreurTrajet {

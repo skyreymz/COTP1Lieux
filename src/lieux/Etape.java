@@ -10,6 +10,10 @@ public class Etape {
      * lieux a cette heure.
      */
     public Etape(Lieu d, Lieu a, MoyenTransport m, Heure h) {
+    	dep = d;
+    	arr = a;
+    	moyen = m;
+    	hdep = h;
     }
 
     public void liste() {
