@@ -87,13 +87,15 @@ public class LigneBus {
     	if (indexDep == -1) {
     		throw new ErreurTrajet();
     	}
-    	Heure heurePassage = new Heure();
+    	Heure tempsTrajet = new Heure();
     	try {
 	    	for (int i = 0 ; i < indexDep ; i++) {
-	    		heurePassage = heurePassage.add(sesTemps[i]); // on ajoute les temps entre le départ et notre arrêt
+	    		tempsTrajet = tempsTrajet.add(sesTemps[i]); // on ajoute les temps entre le départ et notre arrêt
 	    	}
 	    	for (Heure heureDepart : sesDeparts) {
-	    		heurePassage = heurePassage.add(heureDepart); // heure de chaque départ (au premier arrêt de la ligne)
+	    		Heure heurePassage = new Heure();
+	    		heurePassage = heurePassage.add(tempsTrajet);
+	    		heurePassage = heurePassage.add(heureDepart);
 			    if (heurePassage.compareTo(h) >= 0) {
 			    	return h.delaiAvant(heurePassage);
 			    }
